@@ -1,0 +1,18 @@
+{
+    "name": "Omnix.LevelOneEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8e072a095f851384ca6cb2db479f061a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

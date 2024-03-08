@@ -1,0 +1,20 @@
+{
+    "name": "Omnix.Serializables.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f716f61b054eadd4a9a27fbfd8439228",
+        "GUID:8e072a095f851384ca6cb2db479f061a",
+        "GUID:27712bab3fdcda4409da1aa9ff09cb6c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
