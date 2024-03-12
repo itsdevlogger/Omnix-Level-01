@@ -16,28 +16,30 @@ namespace Omnix.Editor.Windows.Resources
             if (layerInfo.isExpanded) Window.StylizeGUI(objCount + 2, 22, layerInfo.Color);
             else Window.StylizeGUI(2, 0, layerInfo.Color);
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUI.BeginChangeCheck();
-            layerInfo.isExpanded = EditorGUILayout.Foldout(layerInfo.isExpanded, $"{layerInfo.name} ({objCount})");
-            if (EditorGUI.EndChangeCheck())
-            {
-            }
+            Color color = GUI.color;
+            GUI.color = layerInfo.FaintColor;
 
-            Object objectToAdd = EditorGUILayout.ObjectField(null, typeof(Object), false, Window.DropObjectsWidth);
-            if (GUILayout.Button("*", Window.MiniButtonWidth))
+            EditorGUILayout.BeginHorizontal();
+            layerInfo.isExpanded = EditorGUILayout.Foldout(layerInfo.isExpanded, $"{layerInfo.name} ({objCount})");
+
+            Object objectToAdd = EditorGUILayout.ObjectField(null, typeof(Object), false, MiniButtonLayoutOptions(3f));
+            GUILayoutOption[] layoutOptions = MiniButtonLayoutOptions(1f);
+            if (GUILayout.Button("*", layoutOptions))
             {
                 EditorGUILayout.EndHorizontal();
                 Window.SwitchDrawMode(new ModeRenameLayer(Window, layerInfo));
+                GUI.color = color;
                 return (null, false);
             }
 
-            if (GUILayout.Button("X", Window.MiniButtonWidth))
+            if (GUILayout.Button("X", layoutOptions))
             {
                 EditorGUILayout.EndHorizontal();
+                GUI.color = color;
                 return (null, true);
             }
 
-            EditorGUILayout.LabelField("", Window.MiniButtonWidth);
+            EditorGUILayout.LabelField("", layoutOptions);
             EditorGUILayout.EndHorizontal();
 
             if (objectToAdd != null)
@@ -48,23 +50,23 @@ namespace Omnix.Editor.Windows.Resources
             if (!layerInfo.isExpanded)
             {
                 EditorGUILayout.Space(10);
+                GUI.color = color;
                 return (null, false);
             }
 
             GUILayout.Space(9);
-            Color color = GUI.backgroundColor;
-            color.a = 0.5f;
-            GUI.backgroundColor = color;
 
             foreach (ObjectInfo objectInfo in ResourcesStorage.Instance[layerInfo.name].allObjects)
             {
                 if (DrawSingleResource(objectInfo, 30, 40, layerInfo.name))
                 {
+                    GUI.color = color;
                     return (objectInfo, false);
                 }
             }
 
             EditorGUILayout.Space(20);
+            GUI.color = color;
             return (null, false);
         }
 
@@ -74,7 +76,8 @@ namespace Omnix.Editor.Windows.Resources
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (storage.LayersCount != 0 && GUILayout.Button("Clear All", Window.MegaButtonWidth))
+            var layoutOptions = MiniButtonLayoutOptions(3f);
+            if (storage.LayersCount != 0 && GUILayout.Button("Clear All", layoutOptions))
             {
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
@@ -104,7 +107,7 @@ namespace Omnix.Editor.Windows.Resources
             GUILayout.Space(20);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Add Section", Window.MegaButtonWidth))
+            if (GUILayout.Button("Add Section", layoutOptions))
             {
                 Window.SwitchDrawMode(new ModeAddLayer(Window));
             }

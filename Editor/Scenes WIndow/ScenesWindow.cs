@@ -15,7 +15,8 @@ namespace Omnix.Editor
 
         private List<SceneAsset> _buildScenes;
         private Vector2 _scrollPos;
-        private SceneAsset _active;
+        private SceneAsset _activeSceneAsset;
+        private Scene _activeScene;
         private bool _needAssignButtonStyles = true;
         
         [MenuItem(OmnixMenu.WINDOW_MENU + "Scenes")]
@@ -27,17 +28,12 @@ namespace Omnix.Editor
         private void OnEnable()
         {
             ReloadScenesList();
-            UpdateActiveScene(default, default);
-            SceneManager.sceneLoaded += UpdateActiveScene;
+            UpdateActiveScene();
         }
         
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= UpdateActiveScene;
-        }
-
         public void OnGUI()
         {
+            UpdateActiveScene();
             if (_needAssignButtonStyles) UpdateButtonStyles();
             DrawGui(position.width);
         }
@@ -71,14 +67,19 @@ namespace Omnix.Editor
             }
         }
         
-        private void UpdateActiveScene(Scene arg0, LoadSceneMode arg1)
+        private void UpdateActiveScene()
         {
-            _active = AssetDatabase.LoadAssetAtPath<SceneAsset>(SceneManager.GetActiveScene().path);
+            Scene activeScene = SceneManager.GetActiveScene();
+            if (activeScene != _activeScene)
+            {
+                _activeScene = activeScene;
+                _activeSceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(activeScene.path);
+            }
         }
 
         private bool DrawSceneButton(SceneAsset scene, bool isGameNotPlaying, bool isAdded, GUILayoutOption width)
         {
-            if (scene == _active)
+            if (scene == _activeSceneAsset)
             {
                 
                 GUILayout.BeginHorizontal();
@@ -103,15 +104,8 @@ namespace Omnix.Editor
 
             if (GUILayout.Button(scene.name, _buttonStyleInactive, width))
             {
-                if (isGameNotPlaying)
-                {
-                    EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
-                    EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scene));
-                }
-                else
-                {
-                    SceneManager.LoadScene(scene.name);
-                }
+                if (isGameNotPlaying) AssetDatabase.OpenAsset(scene);
+                else SceneManager.LoadScene(scene.name);
             }
 
             if (isGameNotPlaying && GUILayout.Button("▶", _buttonStyleInactive, MiniButtonWidth))

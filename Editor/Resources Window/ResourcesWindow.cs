@@ -15,10 +15,6 @@ namespace Omnix.Editor.Windows.Resources
         #endregion
 
         #region Properties
-
-        internal GUILayoutOption DropObjectsWidth => GUILayout.Width(this.position.width * 0.3f);
-        internal GUILayoutOption MiniButtonWidth => GUILayout.Width(20f);
-        internal GUILayoutOption MegaButtonWidth => GUILayout.Width(this.position.width - 120);
         private Vector2 scrollPos;
         #endregion
 

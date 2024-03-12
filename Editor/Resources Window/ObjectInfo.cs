@@ -11,6 +11,16 @@ namespace Omnix.Editor.Windows.Resources
         public string displayName;
         public Object referenceObject;
         public Texture icon;
+        private GUIContent _content;
+
+        public GUIContent Content
+        {
+            get
+            {
+                if (_content == null || string.IsNullOrEmpty(_content.text)) _content = new GUIContent(displayName, icon);
+                return _content;
+            }
+        }
 
         public ObjectInfo()
         {

@@ -1,17 +1,54 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using Omnix.Utils.EditorUtils;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace Omnix.Editor.Windows.Resources
 {
     public abstract class RecWinDrawMod
     {
-        private static readonly float LINE_HEIGHT = 20;
-        private static GUIStyle _buttonStyle;
+        private static GUIStyle _buttonLeftAligned;
+        private static GUIStyle _buttonCenterAligned;
         protected ResourcesWindow Window;
+
+        private static readonly Vector2 PADDING = new Vector2(10f, 3f);
+        private static readonly float LINE_HEIGHT = EditorGUIUtility.singleLineHeight;
+        private static readonly float MINI_BUTTON_WIDTH = LINE_HEIGHT * 2f;
+
+        private static GUIStyle ButtonLeftAligned
+        {
+            get
+            {
+                if (_buttonLeftAligned != null) return _buttonLeftAligned;
+
+                int x = (int)(PADDING.x * 0.5f);
+                int y = (int)(PADDING.y * 0.5f);
+                _buttonLeftAligned = new GUIStyle(EditorStyles.toolbarButton)
+                {
+                    alignment = TextAnchor.MiddleLeft,
+                    padding = new RectOffset(x, x, y, y)
+                };
+                return _buttonLeftAligned;
+            }
+        }
+
+        private static GUIStyle ButtonCenterAligned
+        {
+            get
+            {
+                if (_buttonCenterAligned != null) return _buttonCenterAligned;
+
+                int x = (int)(PADDING.x * 0.5f);
+                int y = (int)(PADDING.y * 0.5f);
+                _buttonCenterAligned = new GUIStyle(EditorStyles.toolbarButton)
+                {
+                    alignment = TextAnchor.MiddleCenter,
+                    padding = new RectOffset(x, x, y, y)
+                };
+
+                return _buttonCenterAligned;
+            }
+        }
+
 
         public abstract void Draw();
 
@@ -19,51 +56,43 @@ namespace Omnix.Editor.Windows.Resources
         {
             if (resource.referenceObject == null) return true;
 
-            if (_buttonStyle == null)
-            {
-                _buttonStyle = new GUIStyle(EditorStyles.toolbarButton);
-                _buttonStyle.alignment = TextAnchor.MiddleLeft;
-                _buttonStyle.padding  = new RectOffset(30, 0, 0, 0);
-            }
-            
-            
-            EditorGUILayout.Space(5);
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
+            Rect original = GUILayoutUtility.GetRect(Window.position.width, LINE_HEIGHT + PADDING.y);
+            original.x += spaceBefore;
+            original.width -= spaceBefore + spaceAfter;
 
-            Rect posRect = GUILayoutUtility.GetRect(Window.position.width, LINE_HEIGHT - 4);
-            posRect.x += spaceBefore;
-            posRect.height += 3;
-            posRect.width -= LINE_HEIGHT * 3 + 30 + spaceAfter;
-            if (GUI.Button(posRect, resource.displayName, _buttonStyle))
+            Rect posRect = new Rect(original);
+            posRect.width = MINI_BUTTON_WIDTH;
+            if (GUI.Button(posRect, "\u23ce", ButtonCenterAligned))
             {
-                if (resource.referenceObject.GetType().IsAssignableFrom(typeof(UnityEditor.SceneAsset)))
-                {
-                    EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
-                    EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(resource.referenceObject));
-                }
-                else
-                {
-                    EditorUtility.FocusProjectWindow();
-                    EditorGUIUtility.PingObject(resource.referenceObject.GetFirstAsset());
-                }
+                AssetDatabase.OpenAsset(resource.referenceObject);
             }
 
-            posRect.width = LINE_HEIGHT;
-            posRect.x += 6;
-            GUI.Label(posRect, resource.icon);
-            posRect.x += Window.position.width - LINE_HEIGHT * 3 - 30 - spaceAfter;
 
-            if (GUI.Button(posRect, "*"))
+            posRect.x += posRect.width + EditorGUIUtility.standardVerticalSpacing;
+            posRect.width = original.width - (MINI_BUTTON_WIDTH + EditorGUIUtility.standardVerticalSpacing) * 3f;
+            if (GUI.Button(posRect, resource.Content, ButtonLeftAligned))
+            {
+                EditorUtility.FocusProjectWindow();
+                EditorGUIUtility.PingObject(resource.referenceObject.GetFirstAsset());
+            }
+
+            posRect.x += posRect.width + EditorGUIUtility.standardVerticalSpacing;
+            posRect.width = MINI_BUTTON_WIDTH;
+            if (GUI.Button(posRect, "*", ButtonCenterAligned))
             {
                 Window.SwitchDrawMode(new ModeRenameResource(resource, Window, layerName));
                 return false;
             }
 
-            posRect.x += LINE_HEIGHT + 4;
-            if (GUI.Button(posRect, "X")) return true;
-            posRect.x += LINE_HEIGHT + 4;
-            Object toMove = EditorGUI.ObjectField(posRect, null, typeof(Object), false);
-            if (toMove) toMove.MoveAssetTo(resource.referenceObject);
+            posRect.x += posRect.width + EditorGUIUtility.standardVerticalSpacing;
+            if (GUI.Button(posRect, "X", ButtonCenterAligned)) return true;
             return false;
+        }
+
+        protected static GUILayoutOption[] MiniButtonLayoutOptions(float widthMultiple)
+        {
+            return new[] { GUILayout.Width(MINI_BUTTON_WIDTH * widthMultiple), GUILayout.Height(LINE_HEIGHT + PADDING.y) };
         }
     }
 }
