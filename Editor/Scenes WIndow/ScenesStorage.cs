@@ -8,7 +8,7 @@ namespace Omnix.Editor
 {
     public class ScenesStorage : EditorStorage<ScenesStorage>, IEnumerable<SceneAsset>
     {
-        [SerializeField] private List<SceneAsset> _assets;
+        [SerializeField] private List<SceneAsset> _assets = new List<SceneAsset>();
         
         protected override void Init() { }
 

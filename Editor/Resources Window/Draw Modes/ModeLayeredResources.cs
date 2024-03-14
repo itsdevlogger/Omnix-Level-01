@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Omnix.Utils.EditorUtils;
+using UnityEditor;
 using UnityEngine;
 
 namespace Omnix.Editor.Windows.Resources
@@ -21,10 +22,11 @@ namespace Omnix.Editor.Windows.Resources
 
             EditorGUILayout.BeginHorizontal();
             layerInfo.isExpanded = EditorGUILayout.Foldout(layerInfo.isExpanded, $"{layerInfo.name} ({objCount})");
+            ButtonsRow.BeginRow(2);
+            EditorGUILayout.EndHorizontal();
 
-            Object objectToAdd = EditorGUILayout.ObjectField(null, typeof(Object), false, MiniButtonLayoutOptions(3f));
-            GUILayoutOption[] layoutOptions = MiniButtonLayoutOptions(1f);
-            if (GUILayout.Button("*", layoutOptions))
+            Object objectToAdd = ButtonsRow.BigObjectField(null, typeof(Object), false);
+            if (ButtonsRow.MiniButton("*"))
             {
                 EditorGUILayout.EndHorizontal();
                 Window.SwitchDrawMode(new ModeRenameLayer(Window, layerInfo));
@@ -32,15 +34,12 @@ namespace Omnix.Editor.Windows.Resources
                 return (null, false);
             }
 
-            if (GUILayout.Button("X", layoutOptions))
+            if (ButtonsRow.MiniButton("X"))
             {
                 EditorGUILayout.EndHorizontal();
                 GUI.color = color;
                 return (null, true);
             }
-
-            EditorGUILayout.LabelField("", layoutOptions);
-            EditorGUILayout.EndHorizontal();
 
             if (objectToAdd != null)
             {
@@ -73,20 +72,18 @@ namespace Omnix.Editor.Windows.Resources
         public override void Draw()
         {
             ResourcesStorage storage = ResourcesStorage.Instance;
+            GUILayoutOption[] options = new[] { GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.5f), GUILayout.Height(EditorGUIUtility.singleLineHeight * 1.5f) };
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            var layoutOptions = MiniButtonLayoutOptions(3f);
-            if (storage.LayersCount != 0 && GUILayout.Button("Clear All", layoutOptions))
+            bool clearAll = GUILayout.Button("Clear All", options);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            if (storage.LayersCount != 0 && clearAll)
             {
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
                 storage.Clear();
                 return;
             }
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
 
             foreach (LayerInfo layer in storage.AllLayers)
             {
@@ -107,7 +104,7 @@ namespace Omnix.Editor.Windows.Resources
             GUILayout.Space(20);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Add Section", layoutOptions))
+            if (GUILayout.Button("Add Section", options))
             {
                 Window.SwitchDrawMode(new ModeAddLayer(Window));
             }

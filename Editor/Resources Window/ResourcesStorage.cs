@@ -10,9 +10,9 @@ namespace Omnix.Editor.Windows.Resources
     public class ResourcesStorage : EditorStorage<ResourcesStorage>
     {
         public bool isLayeredView;
-        [SerializeField] private List<LayerInfo> _resourcesLayers;
-        [SerializeField] private Color[] _layerBackgroundColors;
-        private Dictionary<string, LayerInfo> _allLayers;
+        [SerializeField] private List<LayerInfo> _resourcesLayers = new List<LayerInfo>();
+        [SerializeField] private Color[] _layerBackgroundColors = new Color[0];
+        private Dictionary<string, LayerInfo> _allLayers = new Dictionary<string, LayerInfo>();
 
         private int RandomColor => Random.Range(0, Instance._layerBackgroundColors.Length);
         public int LayersCount => Instance._resourcesLayers.Count;
