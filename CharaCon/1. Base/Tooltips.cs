@@ -9,6 +9,7 @@
         public const string GRAVITY = "The character uses its own gravity value. The engine default is -9.81f";
         public const string GROUNDED_OFFSET = "Useful for rough ground";
         public const string GROUNDED_RADIUS = "The radius of the grounded check. Should match the radius of the CharacterController";
+        public const string HEALTH = "[Can Be Null] Health of this agent";
         public const string GROUND_LAYERS = "What layers the character uses as ground";
         public const string MASS = "Player's mass.";
         public const string CINEMACHINE_CAMERA_TARGET = "The follow target set in the Cinemachine Virtual Camera that the camera will follow";

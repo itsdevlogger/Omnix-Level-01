@@ -72,14 +72,7 @@ namespace Omnix.Editor.Windows.Resources
         public override void Draw()
         {
             ResourcesStorage storage = ResourcesStorage.Instance;
-            GUILayoutOption[] options = new[] { GUILayout.Width(EditorGUIUtility.currentViewWidth * 0.5f), GUILayout.Height(EditorGUIUtility.singleLineHeight * 1.5f) };
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            bool clearAll = GUILayout.Button("Clear All", options);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            if (storage.LayersCount != 0 && clearAll)
+            if (storage.LayersCount != 0 && ButtonsRow.HeaderButton("Clear All"))
             {
                 storage.Clear();
                 return;
@@ -102,15 +95,10 @@ namespace Omnix.Editor.Windows.Resources
             }
 
             GUILayout.Space(20);
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Add Section", options))
+            if (ButtonsRow.HeaderButton("Add Section"))
             {
                 Window.SwitchDrawMode(new ModeAddLayer(Window));
             }
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

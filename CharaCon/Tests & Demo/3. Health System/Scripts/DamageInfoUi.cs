@@ -24,8 +24,9 @@ namespace Omnix.CharaCon.HealthTest
             _position.SetText(damageInfo.position.ToString());
             _direction.SetText(damageInfo.direction.ToString());
             _force.SetText(damageInfo.force.ToString());
-            _hitCollider.SetText(damageInfo.hitCollider.name);
-            _receiver.SetText(damageInfo.receiver.name);
+            if (damageInfo.hitCollider != null) _hitCollider.SetText(damageInfo.hitCollider.name);
+            var receiver = (MonoBehaviour)damageInfo.receiver;
+            if (receiver != null) _receiver.SetText(receiver.name);
             _rawAmount.SetText(damageInfo.rawAmount.ToString(CultureInfo.InvariantCulture));
             _amount.SetText(damageInfo.amount.ToString(CultureInfo.InvariantCulture));
         }

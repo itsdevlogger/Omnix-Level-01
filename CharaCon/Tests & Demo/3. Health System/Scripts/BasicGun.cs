@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Omnix.CharaCon.HealthTest
 {
-    public class BasicGun : MonoBehaviour, IDamageDealer
+    public class BasicGun : MonoBehaviour
     {
         [SerializeField] private LayerMask _damageRecieverLayer;
         [SerializeField] private float _damagePerShot;
@@ -24,7 +24,7 @@ namespace Omnix.CharaCon.HealthTest
                 {
                     // Do not use hit.transform as it returns transform of object with rigidbody
                     // Creates problem when parent has rigidbody, and the collider doesn't
-                    if (hit.collider.TryGetComponent(out DamageReceiver receiver))
+                    if (hit.collider.TryGetComponent(out IDamageable receiver))
                     {
                         receiver.TakeDamage(_damagePerShot, this, hit.point, ray.direction * _forcePerShot);
                     }

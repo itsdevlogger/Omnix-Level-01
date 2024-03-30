@@ -1,48 +1,65 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MenuManagement.Base;
 using Omnix.CharaCon.Collections;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace Omnix.CharaCon.HealthSystem
 {
-    public class Health : MonoBehaviour, IEnumerable<Shield>
+    [GroupProperties("Settings", nameof(_isInvincible), nameof(startValue), nameof(damageMultiplier), nameof(shields))]
+    [GroupProperties("Auto Respawn", nameof(autoRespawnDelay), nameof(healShieldsOnRespawn))]
+    [GroupProperties("References", nameof(damageCollider))]
+    [GroupProperties("Connected Objects", nameof(invincibleHandling), nameof(respawnHandling), nameof(deathHandling))]
+    public class Health : MonoBehaviour, IDamageable, IEnumerable<Shield>
     {
+        #region Events
         /// <param name="damageApplied"> Damage dealt by IDamageDealer object </param>
         /// <param name="healthDeducted"> Health deducted after some damage is absorbed by shields. </param>
         public delegate void DamageDelegate(DamageInfo damageApplied, float healthDeducted);
-        
+
         public event DamageDelegate OnDamaged;
         public event Action OnDeath;
         public event Action OnSpawnOrRespawned;
+        #endregion
 
-        [Header("Settings")]
-        [SerializeField] private bool _isInvincible;
-        [field: SerializeField] public float StartValue { get; protected set; } = 100f;
-        [SerializeField] protected Rigidbody rigidBody;
-        [SerializeField] protected List<Shield> shields = new List<Shield>();
-        
-        [Space, Header("Auto Respawn")]
-        [Tooltip("0 or -ve means no respawning")]
-        public float autoRespawnDelay = -1;
-        public bool healShieldsOnRespawn = true;
-        
-        
-        [Space, Header("Connected Objects")]
-        public ConnectedObjects invincibleHandling;
-        public ConnectedObjects respawnHandling;
-        public ConnectedObjects deathHandling;
+        #region Fields
+        // @formatter:off
+        // Settings 
+        [       SerializeField] private bool _isInvincible;
+        [field: SerializeField] protected float startValue = 100f;
+        [field: SerializeField] protected float damageMultiplier = 1f;
+        [       SerializeField] protected List<Shield> shields = new List<Shield>();
 
+        // Auto Respawn 
+        [Tooltip("0 or -ve means no respawning")] 
+        [SerializeField] public float autoRespawnDelay = -1;
+        [SerializeField] public bool healShieldsOnRespawn = true;
+
+        // References 
+        [field: SerializeField, Tooltip("[Con Be Null] Collider that will be receiving damage for this health component")] 
+        protected Collider damageCollider;
+
+        // Connected Objects 
+        [SerializeField] public ConnectedObjects invincibleHandling;
+        [SerializeField] public ConnectedObjects respawnHandling;
+        [SerializeField] public ConnectedObjects deathHandling;
+
+        // Non Serialized
         private bool _hasInitialize = false;
         private float _value;
+        public bool IsDead => !IsAlive;
+        public float StartValue => startValue;
+        public float DamageMultiplier => damageMultiplier;
+        public Collider Collider => damageCollider;
+        // @formatter:on
 
         public float Value
         {
-            get => _hasInitialize ? _value : StartValue;
+            get => _hasInitialize ? _value : startValue;
             protected set => _value = value;
         }
-        
+
         public bool IsInvincible
         {
             get => _isInvincible;
@@ -52,15 +69,14 @@ namespace Omnix.CharaCon.HealthSystem
                 invincibleHandling.Set(value);
             }
         }
+        #endregion
 
-        
+        #region Access Shields
         // @formatter:off
-        public virtual bool IsAlive                        => Value > 0;
-        public bool IsDead                                 => !IsAlive;
+        public void Add(Shield shield)                     => shields.InitAndAdd(shield);           // Reason why we can make shields public
+        public void AddAll(IEnumerable<Shield> collection) => shields.InitAndAdd(collection);       // Reason why we can make shields public
         public int Count                                   => shields.Count;
         public Shield this[int index]                      => shields[index];
-        public void Add(Shield shield)                     => shields.InitAndAdd(shield);
-        public void AddAll(IEnumerable<Shield> collection) => shields.InitAndAdd(collection);
         public void Remove(Shield shield)                  => shields.Remove(shield);
         public void Remove(int index)                      => shields.RemoveAt(index);
         public void RemoveAll(Predicate<Shield> predicate) => shields.RemoveAll(predicate);
@@ -71,10 +87,17 @@ namespace Omnix.CharaCon.HealthSystem
         public IEnumerator<Shield> GetEnumerator()         => shields.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator()            => shields.GetEnumerator();
         // @formatter:on
+        #endregion
+
+        #region Virtuals
+        public virtual bool IsAlive
+        {
+            get { return Value > 0; }
+        }
 
         protected virtual void Awake()
         {
-            Value = StartValue;
+            Value = startValue;
             invincibleHandling.Set(_isInvincible);
             shields.Init();
             if (Value <= 0) Die();
@@ -87,16 +110,9 @@ namespace Omnix.CharaCon.HealthSystem
             OnSpawnOrRespawned?.Invoke();
         }
 
-        public virtual void TakeDamage(DamageInfo info)
+        protected virtual void Reset()
         {
-            if (_isInvincible || IsDead) return;
-            
-            float damageLeft = shields.Damage(info.amount);
-            Value = Mathf.Max(0f, Value - damageLeft);
-            if (rigidBody != null) rigidBody.AddForceAtPosition(info.force, info.position);
-            
-            OnDamaged?.Invoke(info, damageLeft);
-            if (Value <= 0) Die();
+            damageCollider = GetComponent<Collider>();
         }
 
         /// <summary> Kill this object this instance regardless of its health or shields it has </summary>
@@ -105,7 +121,7 @@ namespace Omnix.CharaCon.HealthSystem
             Value = 0f;
             deathHandling.Set(true);
             OnDeath?.Invoke();
-            
+
             if (autoRespawnDelay > 0) Invoke(nameof(Respawn), autoRespawnDelay);
         }
 
@@ -116,10 +132,37 @@ namespace Omnix.CharaCon.HealthSystem
 
         public virtual void Respawn(bool healShields)
         {
-            Value = StartValue;
+            Value = startValue;
             if (healShields) shields.Restore();
             respawnHandling.Set(true);
             OnSpawnOrRespawned?.Invoke();
         }
+
+        public virtual void TakeDamage(float amount, object dealer)
+        {
+            TakeDamage(new DamageInfo(amount, dealer, damageCollider, this, Vector3.zero, Vector3.zero));
+        }
+
+        public virtual void TakeDamage(float amount, object dealer, Vector3 position)
+        {
+            TakeDamage(new DamageInfo(amount, dealer, damageCollider, this, position, Vector3.zero));
+        }
+
+        public virtual void TakeDamage(float amount, object dealer, Vector3 position, Vector3 force)
+        {
+            TakeDamage(new DamageInfo(amount, dealer, damageCollider, this, position, force));
+        }
+
+        public virtual void TakeDamage(DamageInfo info)
+        {
+            if (_isInvincible || IsDead) return;
+
+            float damageLeft = shields.Damage(info.amount);
+            Value = Mathf.Max(0f, Value - damageLeft);
+
+            OnDamaged?.Invoke(info, damageLeft);
+            if (Value <= 0) Die();
+        }
+        #endregion
     }
 }

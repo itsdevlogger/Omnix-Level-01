@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Omnix.CharaCon.HealthSystem
 {
     [RequireComponent(typeof(Collider))]
-    public class DamageReceiver : MonoBehaviour
+    public class Damageable : MonoBehaviour, IDamageable
     {
         [field: SerializeField] public float DamageMultiplier { get; private set; } = 1f;
         [field: SerializeField] public Health Health { get; private set; }
@@ -20,9 +20,9 @@ namespace Omnix.CharaCon.HealthSystem
             }
         }
 
-        public void TakeDamage(float amount, IDamageDealer dealer) => TakeDamage(amount, dealer, Vector3.zero, Vector3.zero);
-        public void TakeDamage(float amount, IDamageDealer dealer, Vector3 position) => TakeDamage(amount, dealer, position, Vector3.zero);
-        public void TakeDamage(float amount, IDamageDealer dealer, Vector3 position, Vector3 force)
+        public void TakeDamage(float amount, object dealer) => TakeDamage(amount, dealer, Vector3.zero, Vector3.zero);
+        public void TakeDamage(float amount, object dealer, Vector3 position) => TakeDamage(amount, dealer, position, Vector3.zero);
+        public void TakeDamage(float amount, object dealer, Vector3 position, Vector3 force)
         {
             if (Health == null)
             {
@@ -33,6 +33,5 @@ namespace Omnix.CharaCon.HealthSystem
                 Health.TakeDamage(new DamageInfo(amount, dealer, Collider, this, position, force));
             }
         }
-        
     }
 }

@@ -66,7 +66,7 @@ namespace Omnix.CharaCon.HealthSystem
 
         /// <summary> Damage the shield </summary>
         /// <param name="damage"> Amount Damage </param>
-        /// <returns> Amount of damage left un-dealt (This damage will be applied to next <see cref="Shield"/> or <see cref="DamageReceiver"/>) </returns>
+        /// <returns> Amount of damage left un-dealt (This damage will be applied to next <see cref="Shield"/> or <see cref="Damageable"/>) </returns>
         public virtual float Damage(float damage)
         {
             // If shield is already dead, then return

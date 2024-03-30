@@ -14,7 +14,7 @@ namespace Omnix.Editor
         private Vector2 _scrollPos;
         private SceneAsset _activeSceneAsset;
         private Scene _activeScene;
-        
+
         [MenuItem(OmnixMenu.WINDOW_MENU + "Scenes")]
         private static void Init() => GetWindow(typeof(ScenesWindow), false, "Scene").Show();
 
@@ -89,10 +89,10 @@ namespace Omnix.Editor
             }
             return isAdded && ButtonsRow.MiniButton("X");
         }
-        
+
         private void DrawGui(float totalWidth)
         {
-            if (GUILayout.Button("Refresh List"))
+            if (ButtonsRow.HeaderButton("Refresh List"))
             {
                 ReloadScenesList();
                 return;

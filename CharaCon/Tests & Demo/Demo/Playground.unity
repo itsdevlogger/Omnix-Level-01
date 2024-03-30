@@ -126,6 +126,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &457691013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 457691014}
+  - component: {fileID: 457691015}
+  m_Layer: 0
+  m_Name: Hide Notification
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &457691014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457691013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 983800459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &457691015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457691013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a0fd46144841b7a19308d960184dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &542508511
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,52 +515,14 @@ GameObject:
   - component: {fileID: 983800457}
   - component: {fileID: 983800456}
   - component: {fileID: 983800455}
-  - component: {fileID: 983800454}
   - component: {fileID: 983800461}
-  - component: {fileID: 983800460}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: 'Area: Notification'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &983800454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983800453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 605519a12197457a89982a3fa7f48559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _notification:
-    type: 0
-    title: Boom
-    details: Youve found the cube, well done. No Can you move???
-    themeIndex: 0
-    autohideDuration: -1
-    okayButton:
-      <Text>k__BackingField: Okay
-      <IsActive>k__BackingField: 1
-      onClick:
-        m_PersistentCalls:
-          m_Calls: []
-    noButton:
-      <Text>k__BackingField: No
-      <IsActive>k__BackingField: 0
-      onClick:
-        m_PersistentCalls:
-          m_Calls: []
-    cancelButton:
-      <Text>k__BackingField: Cancel
-      <IsActive>k__BackingField: 0
-      onClick:
-        m_PersistentCalls:
-          m_Calls: []
 --- !u!114 &983800455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,7 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 983800454}
+  - {fileID: 1678367510}
 --- !u!65 &983800456
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -610,25 +616,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983800453}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 15.4, y: 0.743, z: 22.52}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
+  m_Children:
+  - {fileID: 1678367509}
+  - {fileID: 457691014}
+  m_Father: {fileID: 1865269881}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &983800460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983800453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86a0fd46144841b7a19308d960184dc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &983800461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -642,7 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 983800460}
+  - {fileID: 457691015}
 --- !u!1 &1028513131
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +704,134 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2114283753834967213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1146505461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146505463}
+  - component: {fileID: 1146505462}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1146505462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146505461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab31bb0fdfec2b8428bfc73a0087aa73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInvincible: 0
+  startValue: 100
+  damageMultiplier: 1
+  shields: []
+  autoRespawnDelay: -1
+  healShieldsOnRespawn: 1
+  damageCollider: {fileID: 0}
+  invincibleHandling:
+    activate: []
+    deactivate: []
+  respawnHandling:
+    activate: []
+    deactivate: []
+  deathHandling:
+    activate: []
+    deactivate: []
+--- !u!4 &1146505463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146505461}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1678367508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678367509}
+  - component: {fileID: 1678367510}
+  m_Layer: 0
+  m_Name: Notify
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678367509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678367508}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 983800459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1678367510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678367508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 605519a12197457a89982a3fa7f48559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _notification:
+    type: 0
+    title: Boom
+    details: Youve found the cube, well done. No Can you move???
+    themeIndex: 0
+    autohideDuration: -1
+    okayButton:
+      <Text>k__BackingField: Okay
+      <IsActive>k__BackingField: 1
+      onClick:
+        m_PersistentCalls:
+          m_Calls: []
+    noButton:
+      <Text>k__BackingField: No
+      <IsActive>k__BackingField: 0
+      onClick:
+        m_PersistentCalls:
+          m_Calls: []
+    cancelButton:
+      <Text>k__BackingField: Cancel
+      <IsActive>k__BackingField: 0
+      onClick:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!1 &1764214107
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,6 +897,38 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!1 &1865269880
+GameObject:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865269881}
+  m_Layer: 0
+  m_Name: Actions & Triggers
+  m_TagString: Folder
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1865269881
+Transform:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865269880}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 983800459}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1469118457508384427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1677,10 +1833,11 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2114283753834967213}
   - {fileID: 8944336656349189700}
   - {fileID: 2070925443028286827}
   - {fileID: 8063073396654575536}
   - {fileID: 8345070700268369567}
   - {fileID: 1469118457508384427}
-  - {fileID: 983800459}
+  - {fileID: 1865269881}
+  - {fileID: 2114283753834967213}
+  - {fileID: 1146505463}

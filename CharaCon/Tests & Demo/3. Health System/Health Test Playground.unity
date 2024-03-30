@@ -758,8 +758,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -19.265, y: 0}
-  m_SizeDelta: {x: 17.33, y: 10}
+  m_AnchoredPosition: {x: -19.48, y: 0}
+  m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &246828361
 MonoBehaviour:
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
+  m_Color: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -967,8 +967,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -19.265}
-  m_SizeDelta: {x: 10, y: 17.33}
+  m_AnchoredPosition: {x: 0, y: -19.48}
+  m_SizeDelta: {x: 5, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &284200718
 MonoBehaviour:
@@ -983,7 +983,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
+  m_Color: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1458,7 +1458,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 9.24, y: 9.24}
+  m_SizeDelta: {x: 7, y: 7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &447359860
 MonoBehaviour:
@@ -1473,7 +1473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6562527, g: 0.6603774, b: 0.3519936, a: 1}
+  m_Color: {r: 1, g: 0.01978819, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1920,8 +1920,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 19.265, y: 0}
-  m_SizeDelta: {x: 17.33, y: 10}
+  m_AnchoredPosition: {x: 19.48, y: 0}
+  m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &574756747
 MonoBehaviour:
@@ -1936,7 +1936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
+  m_Color: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3326,8 +3326,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 19.265}
-  m_SizeDelta: {x: 10, y: 17.33}
+  m_AnchoredPosition: {x: 0, y: 19.48}
+  m_SizeDelta: {x: 5, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1090895409
 MonoBehaviour:
@@ -3342,7 +3342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
+  m_Color: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3814,7 +3814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isInvincible: 0
   <StartValue>k__BackingField: 100
-  rigidBody: {fileID: 1350673942}
+  <DamageMultiplier>k__BackingField: 1
   shields:
   - name: Light Shield
     value: 50
@@ -3822,6 +3822,8 @@ MonoBehaviour:
     restoreOnRespawn: 1
   autoRespawnDelay: 5
   healShieldsOnRespawn: 1
+  rigidBody: {fileID: 1350673942}
+  <Collider>k__BackingField: {fileID: 0}
   invincibleHandling:
     activate: []
     deactivate: []
@@ -4810,14 +4812,14 @@ MonoBehaviour:
   _rightImage: {fileID: 574756747}
   _upImage: {fileID: 1090895409}
   _downImage: {fileID: 284200718}
-  _centerSize: 9.24
-  _armLength: 17.33
-  _armThickness: 10
+  _centerSize: 7
+  _armLength: 20
+  _armThickness: 5
   _armOffset: 5.98
   _showArms: 1
   _showCenter: 1
-  _centerColor: {r: 0.6562527, g: 0.6603774, b: 0.3519936, a: 1}
-  _armColor: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
+  _centerColor: {r: 1, g: 0.01978819, b: 0, a: 1}
+  _armColor: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
 --- !u!1 &2020762551
 GameObject:
   m_ObjectHideFlags: 0

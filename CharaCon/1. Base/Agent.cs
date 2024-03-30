@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using JetBrains.Annotations;
 using Omnix.CharaCon.Abilities;
+using Omnix.CharaCon.HealthSystem;
 using UnityEngine;
-
 
 namespace Omnix.CharaCon
 {
@@ -11,27 +11,48 @@ namespace Omnix.CharaCon
     [RequireComponent(typeof(CharacterController))]
     public class Agent : MonoBehaviour
     {
-        public static Agent LocalAgent { get; private set; }
+        public delegate void AgentSwitchDelegate([CanBeNull] Agent oldAgent, [CanBeNull] Agent newAgent);
+
+        /// <summary> Called when the player switches Character </summary>
+        public static event AgentSwitchDelegate OnSwitched;
+
+        [Obsolete("Use Current (Without underscores) instead")]
+        private static Agent __current__;
+        public static Agent Current
+        {
+            #pragma warning disable CS0618 // Type or member is obsolete
+            get => __current__;
+            private set
+            {
+                Agent old = __current__;
+                __current__ = value;
+                OnSwitched?.Invoke(old, value);
+            }
+            #pragma warning restore CS0618 // Type or member is obsolete
+        }
+        
         
         // @formatter:off
-        [Header("Movement")] 
+        [Header("Settings")]
         [Tooltip(_.MOVE_SPEED)]                               public float moveSpeed = 2.0f;
-        
-        [Space, Header("Physics")] 
         [Tooltip(_.MASS)]                                     public float mass = -15.0f;
         [Tooltip(_.GRAVITY)]                                  public float gravity = -15.0f;
         [Tooltip(_.SPEED_CHANGE_RATE)]                        public float speedChangeRate = 10.0f;
         [Tooltip(_.ROTATION_SMOOTH_TIME)] [Range(0f, 0.3f)]   public float rotationSmoothTime = 0.12f;
-        
-        [Space, Header("Ground Check")] 
+
+        [Space, Header("Settings")]
         [Tooltip(_.GROUND_LAYERS)]                            public LayerMask groundLayers;
         [Tooltip(_.GROUNDED_OFFSET)]                          public float groundOffset = -0.14f;
         [Tooltip(_.GROUNDED_RADIUS)]                          public float groundCheckRadius = 0.28f;
+        
+        [Space, Header("References")]
+        [Tooltip(_.HEALTH), SerializeField, CanBeNull]        private Health _health;
+
+        public bool IsMoving      { get; private set; } = false;
+        public bool IsGrounded    { get; private set; } = true;
+        public float CurrentSpeed { get; private set; } = 0f;
         // @formatter:on
 
-        public bool IsMoving { get; private set; } = false;
-        public bool IsGrounded { get; private set; } = true;
-        public float CurrentSpeed { get; private set; }
         private CharacterController _controller;
         private Vector3 _currentVelocity = Vector3.zero;
         private Dictionary<Type, BaseAbility> _allAbilities = new Dictionary<Type, BaseAbility>();
@@ -43,12 +64,12 @@ namespace Omnix.CharaCon
 
         public CharacterController Controller => _controller;
         public PlayerInputMap InputMap => AgentInput.Instance.InputMap;
-
+        [CanBeNull] public Health Health => _health;
 
         private void Awake()
         {
-            LocalAgent = this;
             _controller = GetComponent<CharacterController>();
+            Current = this;
         }
 
         private void Update()
@@ -70,6 +91,11 @@ namespace Omnix.CharaCon
             Vector3 position = transform.position;
             position.y -= groundOffset;
             Gizmos.DrawSphere(position, groundCheckRadius);
+        }
+
+        private void Reset()
+        {
+            _health = GetComponent<Health>();
         }
 
         private void GroundedCheck()
@@ -141,7 +167,7 @@ namespace Omnix.CharaCon
             }
         }
 
-        
+
         /// <summary> Add force </summary>
         public void AddForce(Vector3 force, ForceMode forceMode = ForceMode.Force)
         {
@@ -184,7 +210,7 @@ namespace Omnix.CharaCon
 
         /// <summary> Tries to get ability of specified type. </summary>
         /// <returns> type if ability is not null. </returns>
-        public bool TryGetAbility<T>(out T ability) where T: BaseAbility
+        public bool TryGetAbility<T>(out T ability) where T : BaseAbility
         {
             if (_allAbilities.TryGetValue(typeof(T), out BaseAbility existing))
             {
@@ -195,17 +221,17 @@ namespace Omnix.CharaCon
             ability = null;
             return false;
         }
-        
+
         /// <summary> Tries to get ability of specified type. </summary>
         /// <returns> type if ability is not null. </returns>
         public bool TryGetAbility(Type type, out BaseAbility ability)
         {
             return _allAbilities.TryGetValue(type, out ability) && ability != null;
         }
-        
+
         /// <summary> Get ability of specified type. </summary>
         /// <returns> Ability, can be null </returns>
-        public T GetAbility<T>() where T: BaseAbility
+        public T GetAbility<T>() where T : BaseAbility
         {
             if (_allAbilities.TryGetValue(typeof(T), out BaseAbility existing))
             {
@@ -214,7 +240,7 @@ namespace Omnix.CharaCon
 
             return null;
         }
-        
+
         /// <summary> Get ability of specified type. </summary>
         /// <returns> Ability, can be null </returns>
         public BaseAbility GetAbility(Type type)

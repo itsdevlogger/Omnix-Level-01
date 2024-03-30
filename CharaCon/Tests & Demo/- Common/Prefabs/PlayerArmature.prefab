@@ -2289,6 +2289,7 @@ GameObject:
   - component: {fileID: 1056259568626290522}
   - component: {fileID: 5069746638788235483}
   - component: {fileID: 6039178928854657501}
+  - component: {fileID: 2172085800940373690}
   m_Layer: 6
   m_Name: PlayerArmature
   m_TagString: Player
@@ -2497,6 +2498,7 @@ MonoBehaviour:
     m_Bits: 1
   groundOffset: -0.14
   groundCheckRadius: 0.28
+  _health: {fileID: 2172085800940373690}
 --- !u!114 &1056259568626290522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2552,6 +2554,35 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   _land:
   - {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+--- !u!114 &2172085800940373690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7823442395675075352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e78ae8c802ea4a7c9cd651b043412806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInvincible: 0
+  startValue: 100
+  damageMultiplier: 1
+  shields: []
+  autoRespawnDelay: -1
+  healShieldsOnRespawn: 1
+  damageCollider: {fileID: 4692622773066258032}
+  invincibleHandling:
+    activate: []
+    deactivate: []
+  respawnHandling:
+    activate: []
+    deactivate: []
+  deathHandling:
+    activate: []
+    deactivate: []
+  _agent: {fileID: 4253922091947888861}
 --- !u!1 &7897629648011575799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2602,9 +2633,14 @@ MonoBehaviour:
   inputStartedHandling: 2
   inputPerformedHandling: 0
   inputCanceledHandling: 0
-  forceMode: 2
-  force: 7
-  cooldownTime: 0.1
+  normalJump:
+    forceMode: 2
+    force: 5.5
+    cooldownTime: 0.1
+  sprintJump:
+    forceMode: 2
+    force: 6.5
+    cooldownTime: 0.25
 --- !u!1 &7916195059481908045
 GameObject:
   m_ObjectHideFlags: 0
