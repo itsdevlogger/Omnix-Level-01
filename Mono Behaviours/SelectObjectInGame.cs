@@ -7,34 +7,64 @@ namespace Omnix.Monos
 {
     public class SelectObjectInGame : MonoBehaviour
     {
-#if UNITY_EDITOR
-        private static SelectObjectInGame Instance;
-        [SerializeField, Range(0, 2)] private int mouseButton = 2;
-        [SerializeField] private KeyCode keyboardButton = KeyCode.None;
+        #if UNITY_EDITOR
+        [SerializeField, Range(0, 2)] private int _mouseButton = 2;
+        [SerializeField] private LayerMask _layers;
+        [SerializeField] private KeyCode _keyboardButton = KeyCode.None;
+        
+        private readonly RaycastHit[] _hits = new RaycastHit[10];
 
-        private void Awake()
+        private void Update()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(this);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            if (!Input.GetMouseButtonDown(_mouseButton)) return;
+            if (_keyboardButton != KeyCode.None && !Input.GetKey(_keyboardButton)) return;
+
+            Selection.activeTransform = GetObjectToSelect(Selection.activeTransform);
         }
 
-        void Update()
+        private Transform GetObjectToSelect(Transform currentlyActive)
         {
-            if (!Input.GetMouseButtonDown(mouseButton)) return;
-            if (keyboardButton != KeyCode.None && !Input.GetKey(keyboardButton)) return;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo))
-                Selection.activeTransform = hitInfo.transform;
+            if (currentlyActive == null)
+            {
+                return Physics.Raycast(ray, out RaycastHit hit, 100f, _layers) ? hit.transform : null;
+            }
+            
+            
+            int count = Physics.RaycastNonAlloc(ray, _hits, 100f, _layers);
+            if (count == 0) return null;
+            if (count == 1) return _hits[0].transform;
+            
+            QuickSortHitsDistance(0, count);
+            var foundActive = false;
+            foreach (RaycastHit hit in _hits)
+            {
+                if (foundActive) return hit.transform;
+                if (hit.transform == currentlyActive) foundActive = true;
+            }
+
+            return _hits[0].transform;
         }
-#endif
+        
+        private void QuickSortHitsDistance(int low, int high)
+        {
+            if (low >= high) return;
+            
+            float distance = _hits[high].distance;
+            int i1 = low;
+            for (int i2 = low; i2 < high; ++i2)
+            {
+                if (_hits[i2].distance < distance)
+                {
+                    (_hits[i1], _hits[i2]) = (_hits[i2], _hits[i1]);
+                    ++i1;
+                }
+            }
+            (_hits[i1], _hits[high]) = (_hits[high], _hits[i1]);
+            QuickSortHitsDistance(low, i1 - 1);
+            QuickSortHitsDistance(i1 + 1, high);
+        }
+        #endif
     }
-
-
 }
