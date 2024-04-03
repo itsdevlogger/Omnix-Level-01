@@ -2290,6 +2290,7 @@ GameObject:
   - component: {fileID: 5069746638788235483}
   - component: {fileID: 6039178928854657501}
   - component: {fileID: 2172085800940373690}
+  - component: {fileID: 4417558465265048941}
   m_Layer: 6
   m_Name: PlayerArmature
   m_TagString: Player
@@ -2583,6 +2584,24 @@ MonoBehaviour:
     activate: []
     deactivate: []
   _agent: {fileID: 4253922091947888861}
+--- !u!114 &4417558465265048941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7823442395675075352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4ee8c5285763b44580016fe6854f90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxSimultaneousTargets: 3
+  _maxInteractionDistance: 5
+  _interactionRange: 10
+  _intractableLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &7897629648011575799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2633,14 +2652,9 @@ MonoBehaviour:
   inputStartedHandling: 2
   inputPerformedHandling: 0
   inputCanceledHandling: 0
-  normalJump:
-    forceMode: 2
-    force: 5.5
-    cooldownTime: 0.1
-  sprintJump:
-    forceMode: 2
-    force: 6.5
-    cooldownTime: 0.25
+  forceMode: 2
+  force: 5.5
+  cooldownTime: 0.1
 --- !u!1 &7916195059481908045
 GameObject:
   m_ObjectHideFlags: 0

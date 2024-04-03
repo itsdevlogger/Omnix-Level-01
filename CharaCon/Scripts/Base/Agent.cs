@@ -62,8 +62,8 @@ namespace Omnix.CharaCon
         private float _rotationVelocity;
         private float _terminalVelocity = 53.0f;
 
-        public CharacterController Controller => _controller;
-        public PlayerInputMap InputMap => AgentInput.Instance.InputMap;
+        [NotNull] public CharacterController Controller => _controller;
+        [NotNull] public PlayerInputMap InputMap => AgentInput.InputMap;
         [CanBeNull] public Health Health => _health;
 
         private void Awake()
@@ -109,7 +109,7 @@ namespace Omnix.CharaCon
         private void Move()
         {
             float targetSpeed;
-            if (AgentInput.Instance.Move == Vector2.zero)
+            if (AgentInput.Move == Vector2.zero)
             {
                 IsMoving = false;
                 targetSpeed = 0.0f;
@@ -137,9 +137,9 @@ namespace Omnix.CharaCon
             }
 
             // if there is a move input rotate player when the player is moving
-            if (AgentInput.Instance.Move != Vector2.zero)
+            if (AgentInput.Move != Vector2.zero)
             {
-                Vector3 inputDirection = new Vector3(AgentInput.Instance.Move.x, 0.0f, AgentInput.Instance.Move.y).normalized;
+                Vector3 inputDirection = new Vector3(AgentInput.Move.x, 0.0f, AgentInput.Move.y).normalized;
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + AgentCamera.Current.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, rotationSmoothTime);
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);

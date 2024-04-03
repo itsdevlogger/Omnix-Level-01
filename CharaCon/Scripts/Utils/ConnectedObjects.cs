@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Omnix.CharaCon.Collections;
 using UnityEngine;
 
-namespace Omnix.CharaCon.HealthSystem
+namespace Omnix.CharaCon.Utils
 {
     [Serializable]
     public class ConnectedObjects

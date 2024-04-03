@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 namespace Omnix.CharaCon
 {
     [RequireComponent(typeof(AudioSource))]
-    public class SoundControl : MonoBehaviour
+    public class AgentSoundControl : MonoBehaviour
     {
         [SerializeField] private AudioSource _source;
         [SerializeField] private AudioClip[] _footsteps;

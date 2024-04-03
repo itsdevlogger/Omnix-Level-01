@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MenuManagement.Base;
-using Omnix.CharaCon.Collections;
+using Omnix.CharaCon.Utils;
 using UnityEngine;
 
 namespace Omnix.CharaCon.HealthSystem

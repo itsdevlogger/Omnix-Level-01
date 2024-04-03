@@ -9,7 +9,7 @@ namespace Omnix.CharaCon.Abilities
     {
         [Space] 
         public float speedMultiplier = 1.5f;
-        protected override InputAction InputAction => InputMap.Movement.Sprint;
+        protected override InputAction InputAction => InputMap.BasicAbilities.Sprint;
 
         protected override void OnEnable()
         {

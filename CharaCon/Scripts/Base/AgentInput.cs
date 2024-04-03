@@ -7,10 +7,10 @@ namespace Omnix.CharaCon
     public class AgentInput : MonoBehaviour
     {
         public static AgentInput Instance { get; private set; }
+        public static PlayerInputMap InputMap { get; private set; }
         
-        public Vector2 Move {get; private set;}
-        public Vector2 Look { get; private set; }
-        public PlayerInputMap InputMap { get; private set; }
+        public static Vector2 Move {get; private set;}
+        public static Vector2 Look { get; private set; }
 
         private InputAction _moveInput;
         private InputAction _lookInput;

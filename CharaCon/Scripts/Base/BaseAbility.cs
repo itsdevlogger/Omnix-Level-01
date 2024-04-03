@@ -40,8 +40,8 @@ namespace Omnix.CharaCon.Abilities
         public Agent Agent                    => _agent;
         public Camera MainCamera              => AgentCamera.Current;
         public Animator Animator              => _agentAnimator;
-        public PlayerInputMap InputMap        => AgentInput.Instance.InputMap;
         public CharacterController Controller => _agent.Controller;
+        protected PlayerInputMap InputMap        => AgentInput.InputMap;
         #endregion
 
         #region Abstract

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Omnix.CharaCon.HealthSystem;
@@ -5,9 +6,9 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace Omnix.CharaCon.Collections
+namespace Omnix.CharaCon.Utils
 {
-    public static class CollectionExtensions
+    public static class Extensions
     {
         /// <summary> Attempts to play a random AudioClip from the list on the provided AudioSource. </summary>
         public static void TryPlayRandom(this List<AudioClip> list, AudioSource source)
@@ -78,7 +79,7 @@ namespace Omnix.CharaCon.Collections
         public static float Damage(this IEnumerable<Shield> list, float totalAmount)
         {
             if (totalAmount <= 0) return totalAmount;
-            
+
             foreach (Shield shield in list)
             {
                 totalAmount = shield.Damage(totalAmount);
@@ -120,6 +121,32 @@ namespace Omnix.CharaCon.Collections
             List<Shield> enumerable = collection as List<Shield> ?? collection.ToList();
             enumerable.Init();
             list.AddRange(enumerable);
+        }
+
+        /// <summary> Copies the given attributes from source to target </summary>
+        public static void Copy(this GameObjectAttributes attributes, Transform copyFrom, Transform copyTo)
+        {
+            if (Copying(GameObjectAttributes.Parent) && copyFrom.parent != null) copyTo.SetParent(copyFrom.parent);
+
+            if (Copying(GameObjectAttributes.Position)) copyTo.position = copyFrom.position;
+            else if (Copying(GameObjectAttributes.LocalPosition)) copyTo.localPosition = copyFrom.localPosition;
+
+            if (Copying(GameObjectAttributes.Rotation)) copyTo.rotation = copyFrom.rotation;
+            else if (Copying(GameObjectAttributes.LocalRotation)) copyTo.localRotation = copyFrom.localRotation;
+
+            if (Copying(GameObjectAttributes.Scale)) copyTo.rotation = copyFrom.rotation;
+            if (Copying(GameObjectAttributes.Layer)) copyTo.gameObject.layer = copyFrom.gameObject.layer;
+            if (Copying(GameObjectAttributes.Tag)) copyTo.tag = copyFrom.tag;
+            return;
+
+            bool Copying(GameObjectAttributes atb) => (attributes & atb) != 0;
+        }
+
+        /// <summary> Copies the given attributes from source to target, and animates the movement </summary>
+        public static void Copy(this GameObjectAttributes attributes, Transform copyFrom, Transform copyTo, float animationDuration, AnimationCurve curve = null, Action onComplete = null)
+        {
+            GameObject go = new GameObject("[Copy GameObjectAttributes]");
+            go.AddComponent<GameObjectAttributesCopy>().Init(attributes, copyFrom, copyTo, animationDuration, curve, onComplete);
         }
     }
 }
