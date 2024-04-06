@@ -35,9 +35,7 @@ namespace Omnix.CharaCon.InteractionSystem
         /// <summary> All the objects to which ray cast has hit in this frame </summary>
         private RaycastHit[] _rayCastHits;
 
-        // Will be set to true in Spawned
-        private bool _canInteract = false; 
-
+        private bool _canInteract = true; 
         public bool CanInteract
         {
             get => _canInteract;
@@ -56,26 +54,26 @@ namespace Omnix.CharaCon.InteractionSystem
         #region Unity Callbacks
         public void OnEnable()
         {
-            _canInteract = true;
             _rayCastHits = new RaycastHit[_maxSimultaneousTargets];
             if (Agent.Current != null && Agent.Current.Health != null) Agent.Current.Health.OnDeath += OnDeath;
-            Agent.OnSwitched += OnSwitched;
+            Agent.OnSwitched += OnAgentSwitched;
+            AgentInput.OnSetInputActive += OnSetInputActive;
         }
 
         public void OnDisable()
         {
             if (Agent.Current != null && Agent.Current.Health != null) Agent.Current.Health.OnDeath -= OnDeath;
-            Agent.OnSwitched -= OnSwitched;
+            Agent.OnSwitched -= OnAgentSwitched;
+            AgentInput.OnSetInputActive += OnSetInputActive;
         }
 
         private void Update()
         {
-            if (_canInteract == false) return;
             if (IsInteracting || _interactingWith.Count > 0)
             {
                 CheckInteractionOver();
             }
-            else
+            else if (_canInteract)
             {
                 UpdateTargets();
                 UpdateInteraction();
@@ -91,8 +89,13 @@ namespace Omnix.CharaCon.InteractionSystem
                 EndInteraction();
             }
         }
+        
+        private void OnSetInputActive(bool value)
+        {
+            CanInteract = value;
+        }
 
-        private void OnSwitched(Agent oldAgent, Agent newAgent)
+        private void OnAgentSwitched(Agent oldAgent, Agent newAgent)
         {
             if (oldAgent.Health != null) oldAgent.Health.OnDeath -= OnDeath;
             if (newAgent.Health != null) newAgent.Health.OnDeath += OnDeath;
@@ -121,7 +124,7 @@ namespace Omnix.CharaCon.InteractionSystem
         /// </summary>
         private void UpdateTargets()
         {
-            Ray ray = AgentCamera.Current.ScreenPointToRay(Input.mousePosition);
+            Ray ray = AgentCamera.Current.ScreenPointToRay(AgentInput.MousePosition);
             int hitCount = Physics.RaycastNonAlloc(ray, _rayCastHits, _maxInteractionDistance, _interactableLayer);
 
             if (hitCount == 0)

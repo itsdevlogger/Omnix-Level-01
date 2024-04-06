@@ -23,7 +23,7 @@ namespace Omnix.CharaCon.InteractionSystem
             }
             else Destroy(gameObject);
         }
-        
+
         private void Setup(InteractableBase interactable)
         {
             interactable.description.Get(out string keycode, out string description);
@@ -33,26 +33,29 @@ namespace Omnix.CharaCon.InteractionSystem
 
         public static void HideAllUi()
         {
-            instance._activeWithUi.SetActive(false);
+            if (instance != null) instance._activeWithUi.SetActive(false);
         }
 
         public static void ToggleInteractionUi(InteractableBase interactable, bool isOn)
         {
+            if (instance == null) return;
+            
             instance._activeWithUi.SetActive(isOn);
             if (isOn) instance.Setup(interactable);
-
         }
 
         public static void ShowMultipleInteraction(IEnumerable<InteractableBase> interactions, Action<InteractableBase> onConfirm, Action onCancel)
         {
+            if (instance == null) return;
+
             foreach (InteractableBase interaction in interactions)
             {
                 onConfirm?.Invoke(interaction);
                 break;
-            }    
+            }
         }
     }
-    
+
     /*public class InteractionUiHandler : MonoBehaviour
     {
         [CanBeNull] private static InteractionUiHandler instance;

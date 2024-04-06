@@ -46,13 +46,13 @@ namespace Omnix.CharaCon
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (AgentInput.Look.sqrMagnitude >= THRESHOLD && !lockCameraPosition)
+            if (AgentInput.MouseDelta.sqrMagnitude >= THRESHOLD && !lockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += AgentInput.Look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += AgentInput.Look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += AgentInput.MouseDelta.x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += AgentInput.MouseDelta.y * deltaTimeMultiplier;
             }
 
             // clamp our rotations so our values are limited 360 degrees

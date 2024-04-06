@@ -2,7 +2,8 @@
     "name": "Omnix.Monos",
     "rootNamespace": "",
     "references": [
-        "GUID:27712bab3fdcda4409da1aa9ff09cb6c"
+        "GUID:27712bab3fdcda4409da1aa9ff09cb6c",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

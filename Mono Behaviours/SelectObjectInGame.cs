@@ -1,24 +1,27 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Omnix.Monos
 {
     public class SelectObjectInGame : MonoBehaviour
     {
         #if UNITY_EDITOR
-        [SerializeField, Range(0, 2)] private int _mouseButton = 2;
         [SerializeField] private LayerMask _layers;
-        [SerializeField] private KeyCode _keyboardButton = KeyCode.None;
+        [SerializeField] private InputAction _action = new InputAction("Middle Mouse Button", InputActionType.Value, "<Mouse>/middleButton");
         
         private readonly RaycastHit[] _hits = new RaycastHit[10];
 
-        private void Update()
+        private void OnEnable()
         {
-            if (!Input.GetMouseButtonDown(_mouseButton)) return;
-            if (_keyboardButton != KeyCode.None && !Input.GetKey(_keyboardButton)) return;
+            _action.started += UpdateSelection;
+        }
 
+        private void UpdateSelection(InputAction.CallbackContext _)
+        {
             Selection.activeTransform = GetObjectToSelect(Selection.activeTransform);
         }
 
@@ -30,12 +33,11 @@ namespace Omnix.Monos
             {
                 return Physics.Raycast(ray, out RaycastHit hit, 100f, _layers) ? hit.transform : null;
             }
-            
-            
+
             int count = Physics.RaycastNonAlloc(ray, _hits, 100f, _layers);
             if (count == 0) return null;
             if (count == 1) return _hits[0].transform;
-            
+
             QuickSortHitsDistance(0, count);
             var foundActive = false;
             foreach (RaycastHit hit in _hits)
@@ -46,11 +48,11 @@ namespace Omnix.Monos
 
             return _hits[0].transform;
         }
-        
+
         private void QuickSortHitsDistance(int low, int high)
         {
             if (low >= high) return;
-            
+
             float distance = _hits[high].distance;
             int i1 = low;
             for (int i2 = low; i2 < high; ++i2)
@@ -61,6 +63,7 @@ namespace Omnix.Monos
                     ++i1;
                 }
             }
+
             (_hits[i1], _hits[high]) = (_hits[high], _hits[i1]);
             QuickSortHitsDistance(low, i1 - 1);
             QuickSortHitsDistance(i1 + 1, high);

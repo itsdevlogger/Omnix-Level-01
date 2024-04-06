@@ -46,6 +46,15 @@ namespace Omnix.CharaCon
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LookDirection"",
+                    ""type"": ""Value"",
+                    ""id"": ""4b74ee37-0a65-4fc0-b960-1af455b10dd4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -180,6 +189,17 @@ namespace Omnix.CharaCon
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8b60f32d-6ab2-41ce-a5b4-7a75d505fd89"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LookDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -300,6 +320,7 @@ namespace Omnix.CharaCon
             m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
             m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
             m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
+            m_Movement_LookDirection = m_Movement.FindAction("LookDirection", throwIfNotFound: true);
             // Basic Abilities
             m_BasicAbilities = asset.FindActionMap("Basic Abilities", throwIfNotFound: true);
             m_BasicAbilities_Jump = m_BasicAbilities.FindAction("Jump", throwIfNotFound: true);
@@ -369,12 +390,14 @@ namespace Omnix.CharaCon
         private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
         private readonly InputAction m_Movement_Move;
         private readonly InputAction m_Movement_Look;
+        private readonly InputAction m_Movement_LookDirection;
         public struct MovementActions
         {
             private @PlayerInputMap m_Wrapper;
             public MovementActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Movement_Move;
             public InputAction @Look => m_Wrapper.m_Movement_Look;
+            public InputAction @LookDirection => m_Wrapper.m_Movement_LookDirection;
             public InputActionMap Get() { return m_Wrapper.m_Movement; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -390,6 +413,9 @@ namespace Omnix.CharaCon
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @LookDirection.started += instance.OnLookDirection;
+                @LookDirection.performed += instance.OnLookDirection;
+                @LookDirection.canceled += instance.OnLookDirection;
             }
 
             private void UnregisterCallbacks(IMovementActions instance)
@@ -400,6 +426,9 @@ namespace Omnix.CharaCon
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
+                @LookDirection.started -= instance.OnLookDirection;
+                @LookDirection.performed -= instance.OnLookDirection;
+                @LookDirection.canceled -= instance.OnLookDirection;
             }
 
             public void RemoveCallbacks(IMovementActions instance)
@@ -491,6 +520,7 @@ namespace Omnix.CharaCon
         {
             void OnMove(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
+            void OnLookDirection(InputAction.CallbackContext context);
         }
         public interface IBasicAbilitiesActions
         {
