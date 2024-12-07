@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using Omnix.Utils.EditorUtils;
-using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using SceneAsset = UnityEditor.SceneAsset;
 
