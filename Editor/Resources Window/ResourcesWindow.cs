@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
+using System.Linq;
+using System.Collections;
 
 
 namespace Omnix.Editor.Windows.Resources
@@ -34,7 +36,6 @@ namespace Omnix.Editor.Windows.Resources
         [MenuItem(OmnixMenu.STORAGE_MENU + "Resources")]
         private static void SelectStorage() => EditorGUIUtility.PingObject(ResourcesStorage.Instance);
 
-        
         protected virtual void OnEnable()
         {
             guiBackStyle = new GUIStyle();
@@ -52,11 +53,11 @@ namespace Omnix.Editor.Windows.Resources
             DrawMode.Draw();
             GUILayout.EndScrollView();
             ResourcesStorage storage = ResourcesStorage.Instance;
-            if (storage.isLayeredView)
+            if (storage.IsLayeredView)
             {
                 if (GUILayout.Button("Switch To Simple View"))
                 {
-                    storage.isLayeredView = false;
+                    storage.IsLayeredView = false;
                     SwitchDrawMode(new ModeSimpleResources(this));
                 }    
             }
@@ -64,7 +65,7 @@ namespace Omnix.Editor.Windows.Resources
             {
                 if (GUILayout.Button("Switch To Layered View"))
                 {
-                    storage.isLayeredView = true;
+                    storage.IsLayeredView = true;
                     SwitchDrawMode(new ModeLayeredResources(this));
                 }
             }
@@ -81,7 +82,7 @@ namespace Omnix.Editor.Windows.Resources
 
         public void SwitchToList()
         {
-            if (ResourcesStorage.Instance.isLayeredView) SwitchDrawMode(new ModeLayeredResources(this));
+            if (ResourcesStorage.Instance.IsLayeredView) SwitchDrawMode(new ModeLayeredResources(this));
             else SwitchDrawMode(new ModeSimpleResources(this));
         }
         

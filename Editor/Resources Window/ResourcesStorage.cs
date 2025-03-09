@@ -3,32 +3,49 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using ThemedUi;
+using UnityEditor;
 
 
 namespace Omnix.Editor.Windows.Resources
 {
     public class ResourcesStorage : EditorStorage<ResourcesStorage>
     {
-        public bool isLayeredView;
+        [SerializeField] private bool _isLayeredView;
         [SerializeField] private List<LayerInfo> _resourcesLayers = new List<LayerInfo>();
         [SerializeField] private Color[] _layerBackgroundColors = new Color[0];
+        
         private Dictionary<string, LayerInfo> _allLayers = new Dictionary<string, LayerInfo>();
-
         private int RandomColor => Random.Range(0, Instance._layerBackgroundColors.Length);
         public int LayersCount => Instance._resourcesLayers.Count;
         public IEnumerable<LayerInfo> AllLayers => _resourcesLayers;
         public LayerInfo this[string layerName] => _allLayers[layerName];
+        public bool IsLayeredView
+        {
+            get => _isLayeredView;
+            set
+            {
+                _isLayeredView = value;
+                Save();
+            }
+        }
+        
         public Color GetColor(int index) => _layerBackgroundColors[index];
         public bool ContainsLayer(string layerName) => !string.IsNullOrEmpty(layerName) && _allLayers.ContainsKey(layerName);
         public bool ContainsObjectInLayer(string layerName, Object obj) => ContainsLayer(layerName) && this[layerName].allObjects.Any(objectInfo => objectInfo.referenceObject.Equals(obj));
-        public void AddTo(string layerName, ObjectInfo obj) => AddLayer(layerName).allObjects.Add(obj);
+        public void AddTo(string layerName, ObjectInfo obj)
+        {
+            var layerInfo = AddLayer(layerName, save: false);
+            layerInfo.allObjects.Add(obj);
+            Save();
+        }
 
-        private LayerInfo AddLayer(string layerName)
+        private LayerInfo AddLayer(string layerName, bool save = true)
         {
             if (_allLayers.ContainsKey(layerName)) return _allLayers[layerName];
             LayerInfo info = new LayerInfo(layerName, RandomColor);
             _allLayers.Add(info.name, info);
             Instance._resourcesLayers.Add(info);
+            if (save) Save();
             return info;
         }
 
@@ -54,6 +71,8 @@ namespace Omnix.Editor.Windows.Resources
             }
 
             if (_resourcesLayers == null) _resourcesLayers = new List<LayerInfo>();
+            
+            Save();
         }
 
         public string GetFirstLayerName()
@@ -76,6 +95,7 @@ namespace Omnix.Editor.Windows.Resources
         {
             _resourcesLayers.Clear();
             _allLayers.Clear();
+            Save();
         }
 
         public void RenameLayer(string oldName, string newName)
@@ -86,6 +106,7 @@ namespace Omnix.Editor.Windows.Resources
             layer.name = newName;
             this._allLayers.Add(newName, layer);
             this._allLayers.Remove(oldName);
+            Save();
         }
 
         public void RemoveFrom(string layerName, ObjectInfo obj)
@@ -96,6 +117,7 @@ namespace Omnix.Editor.Windows.Resources
             if (layerInfo.allObjects.Contains(obj))
             {
                 layerInfo.allObjects.Remove(obj);
+                Save();
             }
         }
 
@@ -105,14 +127,17 @@ namespace Omnix.Editor.Windows.Resources
             if (layerInfo == null) return;
 
             _allLayers.Remove(layerInfo.name);
-            Instance._resourcesLayers.Remove(layerInfo);
+            _resourcesLayers.Remove(layerInfo);
+            Save();
         }
         
         public void AddLayer(LayerInfo info)
         {
             if (ContainsLayer(info.name)) return;
-            this._allLayers.Add(info.name, info);
-            Instance._resourcesLayers.Add(info);
+            
+            _allLayers.Add(info.name, info);
+            _resourcesLayers.Add(info);
+            Save();
         }
         
         public void MoveResourceLayer(ObjectInfo target, string oldLayer, string newLayer)
@@ -120,16 +145,13 @@ namespace Omnix.Editor.Windows.Resources
             if (oldLayer == newLayer) return;
 
             if (!string.IsNullOrEmpty(oldLayer) && _allLayers.ContainsKey(oldLayer) && _allLayers[oldLayer].allObjects.Contains(target))
-            {
                 _allLayers[oldLayer].allObjects.Remove(target);
-            }
 
-            if (!_allLayers.ContainsKey(newLayer))
-            {
+            if (!_allLayers.ContainsKey(newLayer)) 
                 _allLayers.Add(newLayer, new LayerInfo(newLayer, RandomColor));
-            }
 
             _allLayers[newLayer].allObjects.Add(target);
+            Save();
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -95,13 +97,15 @@ namespace Omnix.Editor.CopyPasteHelpers
     
     public static class CopyPasteHelpers
     {
+        public const string OBJECT_MENU = "GameObject/Utils";
+        public const string SELECT_MENU = "Utils/Selections/";
         private const string COPY_TRANSFORM = "Copy Transform";
         private const string PASTE_TRANSFORM = "Paste Transform";
 
         private static ISourceHolder copied;
 
-        [MenuItem(OmnixMenu.SELECT_MENU + COPY_TRANSFORM + " &C")]
-        [MenuItem(OmnixMenu.OBJECT_MENU + COPY_TRANSFORM)]
+        [MenuItem(SELECT_MENU + COPY_TRANSFORM + " &C")]
+        [MenuItem(OBJECT_MENU + COPY_TRANSFORM)]
         private static void CopyTransform()
         {
             Transform source = Selection.activeTransform;
@@ -117,20 +121,34 @@ namespace Omnix.Editor.CopyPasteHelpers
             }
         }
 
-        [MenuItem(OmnixMenu.SELECT_MENU + COPY_TRANSFORM, true)]
-        [MenuItem(OmnixMenu.OBJECT_MENU + COPY_TRANSFORM, true)]
+        [MenuItem(SELECT_MENU + COPY_TRANSFORM, true)]
+        [MenuItem(OBJECT_MENU + COPY_TRANSFORM, true)]
         public static bool IsSingleObjectSelected() => Selection.activeGameObject != null && Selection.gameObjects.Length == 1;
 
         
-        [MenuItem(OmnixMenu.SELECT_MENU + PASTE_TRANSFORM + " &V")]
-        [MenuItem(OmnixMenu.OBJECT_MENU + PASTE_TRANSFORM)]
+        [MenuItem(SELECT_MENU + PASTE_TRANSFORM + " &V")]
+        [MenuItem(OBJECT_MENU + PASTE_TRANSFORM)]
         private static void PasteTransform()
         {
             Transform[] targets = Selection.transforms;
             if (targets != null && targets.Length > 0 && copied != null)
             {
-                OmnixMenu.WrapInUndo("Paste RectTransform", targets, copied.Paste);
+                WrapInUndo("Paste RectTransform", targets, copied.Paste);
             }
+        }
+        
+        /// <summary> Performs given operation on all selected gameObjects and collapse all that in Single Undo operation </summary>
+        /// <remarks> Operation must account for undo </remarks>
+        public static void WrapInUndo<T>(string undoName, IEnumerable<T> targets, Action<T> operation)
+        {
+            int undoGroupIndex = Undo.GetCurrentGroup();
+            Undo.IncrementCurrentGroup();
+            Undo.SetCurrentGroupName(undoName);
+            foreach (T target in targets)
+            {
+                operation(target);
+            }
+            Undo.CollapseUndoOperations(undoGroupIndex);
         }
     }
 }
